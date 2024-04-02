@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Integration from './views/Integration.vue'
+import Activities from './views/Activities.vue'
 import IntegrationLayout from './views/IntegrationLayout.vue'
 
 Vue.use(Router);
@@ -14,6 +15,11 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/activities',
+      name: 'Activities',
+      component: Activities,
     },
     {
       path: '/integration',

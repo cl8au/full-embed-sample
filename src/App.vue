@@ -14,7 +14,39 @@
   export default {
     components: {
       AppHeader
-    }
+    },
+    mounted() {
+      window.addEventListener('message', this.handleMessage);
+    },
+    beforeDestroy() {
+      window.removeEventListener('message', this.handleMessage);
+    },
+    methods: {
+      handleMessage(event) {
+        if (typeof event.data === 'string' || event.data instanceof String) {
+          const data = JSON.parse(event.data);
+          console.log(`IVE-38: receive message ${JSON.stringify(data)}`)
+          switch (data.type) {
+            case 'navigated':
+              console.log('IVE-38: navigated event is received, we can add custom logic here...');
+              if (data.payload.url === '/dashboard/audit') {
+                window.location.href = "/activities";
+              }
+              break;
+            case 'heightChange':
+              console.log('IVE-38: heightChange event is received, we can add custom logic here...');
+              break;
+            case 'connectionStatusChange':
+              console.log('IVE-38: connectionStatusChange event is received, we can add custom logic here...');
+              break;
+            case 'error':
+              console.log('IVE-38: error event is received, we can add custom logic here...');
+              console.log(`IVE-38: error event: ${data.payload.message}`);
+              break;
+          }
+        }
+      },
+    },
   }
 </script>
 

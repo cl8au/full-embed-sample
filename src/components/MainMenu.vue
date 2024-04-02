@@ -18,9 +18,10 @@
         <div class="MainMenu__item MainMenu__item_requests">
           Requests
         </div>
-        <div class="MainMenu__item MainMenu__item_analytics">
-          Analytics
-        </div>
+        <RouterLink class="MainMenu__item MainMenu__item_analytics" to="/activities"
+          active-class="MainMenu__item_active">
+          Activities
+        </RouterLink>
         <RouterLink class="MainMenu__item MainMenu__item_integration" to="/integration"
           active-class="MainMenu__item_active">
           Integration
