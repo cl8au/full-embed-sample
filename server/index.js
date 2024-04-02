@@ -13,7 +13,7 @@ export default app => {
     app.use(auth(basicAuth));
   }
 
-  app.get('/workato-jwt', (req, res) => {
+  app.get('/workato-jwt', (_req, res) => {
     const {WK_API_KEY, WK_CUSTOMER_ID, WK_USER_ID, WK_CUSTOM_VENDOR_ORIGIN} = process.env;
     const subParams = [WK_API_KEY, WK_CUSTOMER_ID];
     if (WK_USER_ID) {
@@ -32,7 +32,30 @@ export default app => {
       privateKey,
       {algorithm: 'RS256'}
     );
-
     res.json(token);
+  });
+
+  app.get('/workato-sso-link', (_req, res) => {
+    const {WK_API_KEY, WK_CUSTOMER_ID, WK_USER_ID, WK_CUSTOM_VENDOR_ORIGIN} = process.env;
+    const subParams = [WK_API_KEY, WK_CUSTOMER_ID];
+    if (WK_USER_ID) {
+      subParams.push(WK_USER_ID);
+    }
+
+    const subValue = subParams.join(':');
+    console.log(`sub value: ${subValue}`)
+    const privateKey = fs.readFileSync(process.env.WK_JWT_PRIVATE_KEY_PATH, 'utf8');
+    const token = sign(
+      {
+        sub: subValue,
+        jti: nanoid(),
+        origin: WK_CUSTOM_VENDOR_ORIGIN || undefined
+      },
+      privateKey,
+      {algorithm: 'RS256'}
+    );
+    res.json({
+      link: `https://app.workato.com/direct_link/recipes?workato_dl_token=${token}`
+    });
   });
 }
